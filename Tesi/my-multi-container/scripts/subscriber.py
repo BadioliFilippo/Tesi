@@ -1,20 +1,27 @@
 import paho.mqtt.client as mqtt
 import time
+from pymongo import MongoClient
 
-broker = "test.mosquitto.org"
-port = 8080
+broker = "mosquitto"
+port = 1883
 mongo_uri = "mongodb://mongo:27017"
-topic = "test/topic"
+sensors = ["Watch", "Expressions", "Distractions"]
+topics = [f"Sensor/{name}" for name in sensors]
 
+clientM = MongoClient(mongo_uri)
+db = clientM["SensorData"]
+collection = db["Sensor"]
 def on_connect(client, userdata, flags, reason_code):
     print("Connected with reason code:", reason_code)
-    client.subscribe(topic)
+    for topic in topics:
+        client.subscribe(topic)
 
 def on_message(client, userdata, message):
     print(f"Message received: {message.payload.decode()} on topic {message.topic}")
+    collection.insert_one({f"{message.topic}" : message.payload.decode()})
 
 def main():
-    client = mqtt.Client(transport="websockets")
+    client = mqtt.Client(protocol=mqtt.MQTTv311, callback_api_version=)
     client.on_connect = on_connect
     client.on_message = on_message
     try:

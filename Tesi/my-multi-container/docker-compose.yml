@@ -19,15 +19,17 @@ services:
       - ./mosquitto-config/mosquitto.conf:/mosquitto/config/mosquitto.conf
 
   python:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     container_name: python
     depends_on:
       - mosquitto
+      - mongo
     volumes:
       - ./scripts:/scripts
     working_dir: /scripts
+    command: python subscriber.py
 
 volumes:
   mongo-data:
