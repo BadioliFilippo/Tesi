@@ -1,14 +1,14 @@
 import paho.mqtt.client as mqtt
 
-broker = "localhost"
-port = 1883
+broker = "test.mosquitto.org"
+port = 8080
 topic = "test/topic"
 
 def on_publish(client, userdata, mid, properties=None, reason_code=None):
     print("Messaggio pubblicato con MID:", mid)
 
 def main():
-    client = mqtt.Client(protocol=mqtt.MQTTv5, callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
+    client = mqtt.Client(transport="websockets")
 
     client.on_publish = on_publish
     client.connect(broker, port)
