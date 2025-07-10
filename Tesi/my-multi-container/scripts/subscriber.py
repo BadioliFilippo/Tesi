@@ -21,7 +21,7 @@ def on_message(client, userdata, message):
     collection.insert_one({f"{message.topic}" : message.payload.decode()})
 
 def main():
-    client = mqtt.Client(protocol=mqtt.MQTTv311, callback_api_version=)
+    client = mqtt.Client(protocol=mqtt.MQTTv311)
     client.on_connect = on_connect
     client.on_message = on_message
     try:
