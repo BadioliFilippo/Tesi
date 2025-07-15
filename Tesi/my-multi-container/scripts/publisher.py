@@ -7,20 +7,20 @@ sensors = ["Watch", "Distractions", "Expressions"]
 topics = [f"Sensor/{name}" for name in sensors]
 rand = random.choice(sensors)
 
-def on_publish(client, userdata, mid, properties=None, reason_code=None):
+def on_publish(client, userdata, mid, properties=None):
     print("Messaggio pubblicato con MID:", mid)
 
 def watch():
     return f"BPM = {random.randint(80, 120)}"
 
 def distr():
-    return f"Distracted by {random.choice(["Smartphone", "Outside event", "Radio dashboard"])}"
+    return f"Distracted by {random.choice(['Smartphone', 'Outside event', 'Radio dashboard'])}"
 
 def expr():
-    return f"Driver face: {random.choice(["Sneezing", "Yawning", "Sleepy", "Angry"])}"
+    return f"Driver face: {random.choice(['Sneezing', 'Yawning', 'Sleepy', 'Angry'])}"
 
 def main():
-    client = mqtt.Client(transport="websockets")
+    client = mqtt.Client(protocol=mqtt.MQTTv311, callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
 
     client.on_publish = on_publish
     client.connect(broker, port)
@@ -28,13 +28,13 @@ def main():
 
     match rand:
         case "Watch": 
-            message = f"BPM = {random.randint(80, 120)}"
+            message = watch()
             topic = topics[0]
         case "Distractions": 
-            message = f"Distracted by {random.choice(["Smartphone", "Outside event", "Radio dashboard"])}"
+            message = distr()
             topic = topics[1]
         case "Expressions": 
-            message = f"Driver face: {random.choice(["Sneezing", "Yawning", "Sleepy", "Angry"])}"
+            message = expr()
             topic = topics[2]
 
     result = client.publish(topic, message)

@@ -18,11 +18,24 @@ services:
       - mosquitto-logs:/mosquitto/log
       - ./mosquitto-config/mosquitto.conf:/mosquitto/config/mosquitto.conf
 
-  python:
+  subscriber:
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: python
+      dockerfile: subscriber.Dockerfile
+    container_name: subscriber
+    depends_on:
+      - mosquitto
+      - mongo
+    volumes:
+      - ./scripts:/scripts
+    working_dir: /scripts
+    command: python subscriber.py
+
+  publisher:
+    build:
+      context: .
+      dockerfile: publisher.Dockerfile
+    container_name: publisher
     depends_on:
       - mosquitto
       - mongo

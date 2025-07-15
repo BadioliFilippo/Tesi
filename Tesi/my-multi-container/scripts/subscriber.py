@@ -11,7 +11,8 @@ topics = [f"Sensor/{name}" for name in sensors]
 clientM = MongoClient(mongo_uri)
 db = clientM["SensorData"]
 collection = db["Sensor"]
-def on_connect(client, userdata, flags, reason_code):
+
+def on_connect(client, userdata, flags, reason_code, properties):
     print("Connected with reason code:", reason_code)
     for topic in topics:
         client.subscribe(topic)
@@ -21,7 +22,9 @@ def on_message(client, userdata, message):
     collection.insert_one({f"{message.topic}" : message.payload.decode()})
 
 def main():
-    client = mqtt.Client(protocol=mqtt.MQTTv311)
+    print("Publisher starting")
+    client = mqtt.Client(protocol=mqtt.MQTTv311, callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
+    print("Connection Estabilished")
     client.on_connect = on_connect
     client.on_message = on_message
     try:
