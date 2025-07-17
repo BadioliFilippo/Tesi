@@ -28,8 +28,9 @@ services:
       - mongo
     volumes:
       - ./scripts:/scripts
+      - ./data:/data
     working_dir: /scripts
-    command: python subscriber.py
+    command: sh -c "set -x; python subscriber.py"
 
   publisher:
     build:
@@ -42,7 +43,7 @@ services:
     volumes:
       - ./scripts:/scripts
     working_dir: /scripts
-    command: python subscriber.py
+    command: python publisher.py
 
 volumes:
   mongo-data:

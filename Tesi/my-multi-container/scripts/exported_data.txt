@@ -1,0 +1,11 @@
+{"Sensor/Watch": "BPM = 107"}
+{"Sensor/Distractions": "Distracted by Outside event"}
+{"Sensor/Watch": "BPM = 84"}
+{"Sensor/Expressions": "Driver face: Sleepy"}
+{"Sensor/Distractions": "Distracted by Smartphone"}
+{"Sensor/Expressions": "Driver face: Angry"}
+{"Sensor/Expressions": "Driver face: Angry"}
+{"Sensor/Watch": "BPM = 104"}
+{"Sensor/Watch": "BPM = 111"}
+{"Sensor/Expressions": "Driver face: Yawning"}
+{"Sensor/Watch": "BPM = 97"}

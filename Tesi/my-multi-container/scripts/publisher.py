@@ -20,7 +20,7 @@ def expr():
     return f"Driver face: {random.choice(['Sneezing', 'Yawning', 'Sleepy', 'Angry'])}"
 
 def main():
-    client = mqtt.Client(protocol=mqtt.MQTTv311, callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
+    client = mqtt.Client(protocol=mqtt.MQTTv311)
 
     client.on_publish = on_publish
     client.connect(broker, port)

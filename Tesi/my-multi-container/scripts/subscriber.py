@@ -1,6 +1,10 @@
 import paho.mqtt.client as mqtt
 import time
 from pymongo import MongoClient
+import sys
+sys.stdout.reconfigure(line_buffering=True)
+import subprocess
+
 
 broker = "mosquitto"
 port = 1883
@@ -12,18 +16,19 @@ clientM = MongoClient(mongo_uri)
 db = clientM["SensorData"]
 collection = db["Sensor"]
 
-def on_connect(client, userdata, flags, reason_code, properties):
-    print("Connected with reason code:", reason_code)
+def on_connect(client, userdata, flags, reasonCode, properties=None):
+    print("Connected with reason code:", reasonCode)
     for topic in topics:
         client.subscribe(topic)
 
 def on_message(client, userdata, message):
     print(f"Message received: {message.payload.decode()} on topic {message.topic}")
     collection.insert_one({f"{message.topic}" : message.payload.decode()})
+    subprocess.run(["python", "/scripts/exporter.py"])
 
 def main():
-    print("Publisher starting")
-    client = mqtt.Client(protocol=mqtt.MQTTv311, callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
+    print("Sub starting")
+    client = mqtt.Client(protocol=mqtt.MQTTv311)
     print("Connection Estabilished")
     client.on_connect = on_connect
     client.on_message = on_message
